@@ -59,18 +59,14 @@ def playfair_cipher(key: str, plaintext: str):
             cipher += key_matrix[r1][c2]
             cipher += key_matrix[r2][c1]
 
-    return cipher
+    return cipher.upper()
 
 
 def vernam_cipher(key: str, plaintext: str):
+    auto_key = (key + plaintext)[:len(plaintext)].lower()
     cipher = ''
-    i = 0
-    key = key.lower()
-    for char in plaintext.lower():
-        cipher += chr(((ord(char)-97) ^ (ord(key[i])-97)) + 97)
-        i += 1
-        if i == len(key):
-            i = 0
+    for text, key in zip(plaintext.lower(), auto_key):
+        cipher += chr(((ord(text)-97) ^ (ord(key)-97)) + 97)
 
     return cipher.upper()
 
@@ -90,12 +86,18 @@ def row_cipher(key: str, plaintext: str):
 
 
 def rail_fence_cipher(key: int, plaintext: str):
-    cipher = ''
-    for i in range(key):
-        for j in range(i, len(plaintext), key):
-            cipher += plaintext[j]
+    rows = [''] * key
+    i = 0
+    signed = 1
+    for c in plaintext:
+        rows[i] += c
+        if i == 0:
+            signed = 1
+        elif i == key - 1:
+            signed = -1
+        i += signed
 
-    return cipher.upper()
+    return ''.join(rows).upper()
 
 
 if __name__ == '__main__':
