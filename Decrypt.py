@@ -1,8 +1,25 @@
 import sys
+from CaesarDecrypt import CaesarDecrypt
+from PlayfairDecrypt import PlayfairDecrypt
+from RailFenceDecrypt import RailFenceDecrypt
+from RowTranspositionDecrypt import RowDecrypt
+from VernamProposedTheAutokeySystemDecrypt import VernamDecrypt
 
 def main():
-    for arg in sys.argv:
-        print(arg)
+    plainText = ''
+    cipher = sys.argv[1]
+    key = sys.argv[2]
+    cipherText = sys.argv[3]
+    if cipher == 'caesar':
+        CaesarDecrypt(key, cipherText)
+    elif cipher == 'playfair':
+        PlayfairDecrypt(key, cipherText)
+    elif cipher == 'vernam':
+        VernamDecrypt(key, cipherText)
+    elif cipher == 'row':
+        RowDecrypt(key, cipherText)
+    elif cipher == 'rail_fence':
+        RailFenceDecrypt(key, cipherText)
 
 if __name__ == '__main__':
     main()
