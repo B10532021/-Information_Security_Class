@@ -1,9 +1,9 @@
-def PlayfairDecrypt(key, cipherText):
+def VernamDecrypt(key: str, cipherText: str):
     plainText = ''
     nextKey = ''
     i = 0
     for char in cipherText:
-        temp += chr((ord(char) - 65) ^ (ord(key[i]) - 65) + 65)
+        temp = chr((ord(char) - 65) ^ (ord(key[i]) - 65) + 97)
         plainText += temp
         nextKey += temp
         i += 1
@@ -13,3 +13,5 @@ def PlayfairDecrypt(key, cipherText):
             i = 0
 
     print(plainText)
+
+VernamDecrypt('ABC', 'HFJMK^Fˋ^N')

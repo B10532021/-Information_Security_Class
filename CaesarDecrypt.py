@@ -1,4 +1,4 @@
-def CaesarDecrypt(key, cipherText):
+def CaesarDecrypt(key: int, cipherText: str):
     plainText = ''
     for char in cipherText:
         # print(ord(char))

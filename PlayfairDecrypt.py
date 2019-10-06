@@ -1,7 +1,7 @@
 import numpy as np
 from collections import OrderedDict
 
-def PlayfairDecrypt(key, cipherText):
+def PlayfairDecrypt(key: str, cipherText: str):
     alphabets = 'ABCDEFGHIKLMNOPQRSTUVWXYZ'
     codeList = []
     key = key.replace('J', 'I')
@@ -34,6 +34,6 @@ def PlayfairDecrypt(key, cipherText):
             plainText += codeMatrix[x2][y1]
     
 
-    print(plainText)
+    print(plainText.lower())
 
 # PlayfairDecrypt('COMP', 'HELLOO')
