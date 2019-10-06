@@ -27,8 +27,8 @@ def PlayfairDecrypt(key: str, cipherText: str):
             plainText += codeMatrix[x1][(y1 - 1) % 5]
             plainText += codeMatrix[x2][(y2 - 1) % 5]
         elif y1 == y2:
-            plainText += codeMatrix[(x1 - 1) % 5]
-            plainText += codeMatrix[(x2 - 1) % 5]
+            plainText += codeMatrix[(x1 - 1) % 5][y1]
+            plainText += codeMatrix[(x2 - 1) % 5][y2]
         else:
             plainText += codeMatrix[x1][y2]
             plainText += codeMatrix[x2][y1]

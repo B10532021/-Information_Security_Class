@@ -15,4 +15,4 @@ def VernamDecrypt(key: str, cipherText: str):
 
     return plainText.lower()
 
-# VernamDecrypt('ABC', 'HFJMK~F~N')
+# VernamDecrypt('ABC', 'HFJMK^F`^N')
