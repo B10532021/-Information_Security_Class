@@ -63,12 +63,12 @@ def playfair_cipher(key: str, plaintext: str):
 
 
 def vernam_cipher(key: str, plaintext: str):
-    auto_key = (key + plaintext)[:len(plaintext)].lower()
+    auto_key = (key + plaintext)[:len(plaintext)].upper()
     cipher = ''
-    for text, key in zip(plaintext.lower(), auto_key):
-        cipher += chr(((ord(text)-97) ^ (ord(key)-97)) + 97)
+    for text, key in zip(plaintext.upper(), auto_key):
+        cipher += chr(((ord(text)-65) ^ (ord(key)-65)) + 65)
 
-    return cipher.upper()
+    return cipher
 
 
 def row_cipher(key: str, plaintext: str):
