@@ -39,6 +39,36 @@ class TestEncryptDecrypt(unittest.TestCase):
         cipher = rail_fence_cipher(int(key), plaintext)
         self.assertEqual(RailFenceDecrypt(int(key), cipher), plaintext)
 
+    def test_caesar_2(self):
+        key = '16'
+        plaintext = 'testinginpythonisahugetopicandcancomewithalotofcomplexity'
+        cipher = caesar_cipher(int(key), plaintext)
+        self.assertEqual(CaesarDecrypt(int(key), cipher), plaintext)
+
+    def test_playfair_2(self):
+        key = 'JDSAQJDAOS'
+        plaintext = 'pneumonoultramicroscopicsilicovolcanoconiosiszaq'
+        cipher = playfair_cipher(key, plaintext)
+        self.assertEqual(PlayfairDecrypt(key, cipher), plaintext)
+
+    def test_vernam_2(self):
+        key = 'QQPRGGBE'
+        plaintext = 'pneumonoultramicroscopicsilicovolcanoconiosiseeeeexxx'
+        cipher = vernam_cipher(key, plaintext)
+        self.assertEqual(VernamDecrypt(key, cipher), plaintext)
+
+    def test_row_2(self):
+        key = '749523618'
+        plaintext = 'ytixelpmocfotolahtiwemocnacdnacipoteguhasinohtypnignitset'
+        cipher = row_cipher(key, plaintext)
+        self.assertEqual(RowDecrypt(key, cipher), plaintext)
+
+    def test_rail_fence_2(self):
+        key = '6'
+        plaintext = 'testinginpythonisahugetopicandcancomewithalotofcomplexity'
+        cipher = rail_fence_cipher(int(key), plaintext)
+        self.assertEqual(RailFenceDecrypt(int(key), cipher), plaintext)
+
 
 if __name__ == '__main__':
     unittest.main()
