@@ -5,4 +5,4 @@ def CaesarDecrypt(key: int, cipherText: str):
         temp = chr((ord(char) - key - 65) % 26 + 97)
         plainText += temp
     
-    print(plainText)
+    print(plainText.lower())

@@ -24,4 +24,4 @@ def RowDecrypt(key: str, cipherText: str):
 
     print(plainText.lower())
 
-RowDecrypt('4312567', 'TTNAAPTMTSUOAODWCOIXKNLYPET')
+# RowDecrypt('4312567', 'TTNAAPTMTSUOAODWCOIXKNLYPET')

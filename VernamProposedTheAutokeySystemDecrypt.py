@@ -3,8 +3,9 @@ def VernamDecrypt(key: str, cipherText: str):
     nextKey = ''
     i = 0
     for char in cipherText:
-        temp = chr((ord(char) - 65) ^ (ord(key[i]) - 65) + 97)
-        plainText += temp
+        # print((ord(char) - 65),(ord(key[i])-65), chr((ord(char) - 65) ^ (ord(key[i]) - 65) + 65))
+        temp = chr(((ord(char) - 65) ^ (ord(key[i]) - 65)) + 65)
+        plainText += chr(ord(temp) + 32)
         nextKey += temp
         i += 1
         if i == len(key):
@@ -12,6 +13,6 @@ def VernamDecrypt(key: str, cipherText: str):
             nextKey = ''
             i = 0
 
-    print(plainText)
+    print(plainText.lower())
 
-VernamDecrypt('ABC', 'HFJMK^Fˋ^N')
+# VernamDecrypt('ABC', 'HFJMK~F~N')
