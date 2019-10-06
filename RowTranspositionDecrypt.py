@@ -22,6 +22,5 @@ def RowDecrypt(key: str, cipherText: str):
             plainText += cipherMatrix[int(col) - 1][row]
 
 
-    print(plainText.lower())
-
+    return plainText.lower()
 # RowDecrypt('4312567', 'TTNAAPTMTSUOAODWCOIXKNLYPET')

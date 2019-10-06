@@ -1,4 +1,5 @@
 def RailFenceDecrypt(key: int, cipherText: str):
+    key = int(key)
     plainText = ''
     railMatrix = [['*' for i in range(len(cipherText))] for j in range(key)]
     down = False
@@ -41,6 +42,6 @@ def RailFenceDecrypt(key: int, cipherText: str):
         else:
             row -= 1
 
-    print(plainText.lower())
+    return plainText.lower()
 
 # RailFenceDecrypt(3, 'HOLELWRDLO')

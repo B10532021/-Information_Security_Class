@@ -13,6 +13,6 @@ def VernamDecrypt(key: str, cipherText: str):
             nextKey = ''
             i = 0
 
-    print(plainText.lower())
+    return plainText.lower()
 
 # VernamDecrypt('ABC', 'HFJMK~F~N')

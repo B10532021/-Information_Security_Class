@@ -11,15 +11,15 @@ def main():
     key = sys.argv[2]
     cipherText = sys.argv[3]
     if cipher == 'caesar':
-        CaesarDecrypt(key, cipherText)
+        print(CaesarDecrypt(key, cipherText))
     elif cipher == 'playfair':
-        PlayfairDecrypt(key, cipherText)
+        print(PlayfairDecrypt(key, cipherText))
     elif cipher == 'vernam':
-        VernamDecrypt(key, cipherText)
+        print(VernamDecrypt(key, cipherText))
     elif cipher == 'row':
-        RowDecrypt(key, cipherText)
+        print(RowDecrypt(key, cipherText))
     elif cipher == 'rail_fence':
-        RailFenceDecrypt(key, cipherText)
+        print(RailFenceDecrypt(key, cipherText))
 
 if __name__ == '__main__':
     main()

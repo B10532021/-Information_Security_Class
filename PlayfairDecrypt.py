@@ -34,6 +34,6 @@ def PlayfairDecrypt(key: str, cipherText: str):
             plainText += codeMatrix[x2][y1]
     
 
-    print(plainText.lower())
+    return plainText.lower()
 
 # PlayfairDecrypt('COMP', 'HELLOO')
