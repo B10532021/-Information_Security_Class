@@ -25,6 +25,7 @@ def caesar_cipher(key: int, plaintext: str):
 def playfair_cipher(key: str, plaintext: str):
     alphabet = 'abcdefghiklmnopqrstuvwxyz'
 
+    plaintext = plaintext.replace('j', 'i')
     key = key.lower().replace('j', 'i')
     key = ''.join(OrderedDict.fromkeys(key + alphabet)).lower()
     key_matrix = np.reshape([c for c in key], (5, 5))
