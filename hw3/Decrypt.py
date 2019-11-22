@@ -36,7 +36,8 @@ def aes_decrypt(ciphertext: bytes, mode) -> bytes:
         
         plaintext = xor(blocks[0], aes.encrypt(init_vec))
         for i in range(1, len(blocks)):
-            plaintext += xor(blocks[i], aes.encrypt((int(init_vec.hex(), 16) + i).to_bytes(32, byteorder="big")))
+            counter = (int(init_vec.hex(), 16) + i) % ((1 << 256) - 1)
+            plaintext += xor(blocks[i], aes.encrypt(counter.to_bytes(32, byteorder="big")))
 
     return plaintext
 
