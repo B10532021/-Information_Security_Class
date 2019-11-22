@@ -11,7 +11,7 @@ from utils import *
 
 parser = ArgumentParser()
 parser.add_argument('img_path')
-parser.add_argument('mode', choices=['ECB', 'CBC'])
+parser.add_argument('mode', choices=['ECB', 'CBC', 'CTR'])
 #parser.add_argument('--key', '-k', help='key for AES encryption')
 
 
@@ -22,11 +22,22 @@ def aes_encrypt(plaintext: bytes, mode) -> bytes:
     if mode == 'ECB':
         cipher = bytes().join([aes.encrypt(block) for block in blocks])
     if mode == 'CBC':
-        cipher = aes.encrypt(xor(blocks[0], INIT_VEC))
+        init_vec = INIT_VEC
+        with open(f'INIT_VEC_{mode}', 'wb') as file:
+            file.write(init_vec)
+
+        cipher = aes.encrypt(xor(blocks[0], init_vec))
         prev_cipher_block = cipher
         for i in range(1, len(blocks)):
             prev_cipher_block = aes.encrypt(xor(prev_cipher_block, blocks[i]))
             cipher += prev_cipher_block
+    elif mode == 'CTR':
+        init_vec = INIT_VEC
+        with open(f'INIT_VEC_{mode}', 'wb') as file:
+            file.write(init_vec)
+        cipher = xor(blocks[0], aes.encrypt(init_vec))
+        for i in range(1, len(blocks)):
+            cipher += xor(blocks[i], aes.encrypt((int(init_vec.hex(), 16) + i).to_bytes(32, byteorder="big")))
 
     return cipher
 
