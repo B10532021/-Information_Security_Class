@@ -15,20 +15,19 @@ parser.add_argument('mode', choices=['ECB', 'CBC'])
 #parser.add_argument('--key', '-k', help='key for AES encryption')
 
 
-def aes_encrypt(plaintext: bytes, mode) -> bytes:
-    text = pad(plaintext)
+def aes_decrypt(ciphertext: bytes, mode) -> bytes:
+    text = pad(ciphertext)
     blocks = [text[i:i + BLOCK_SIZE] for i in range(0, len(text), BLOCK_SIZE)]
 
     if mode == 'ECB':
-        cipher = bytes().join([aes.encrypt(block) for block in blocks])
+        plaintext = bytes().join([aes.decrypt(block) for block in blocks])
     if mode == 'CBC':
-        cipher = aes.encrypt(xor(blocks[0], INIT_VEC))
-        prev_cipher_block = cipher
+        plaintext = xor(aes.decrypt(blocks[0]), INIT_VEC)
+        prev_cipher_block = blocks[0]
         for i in range(1, len(blocks)):
-            prev_cipher_block = aes.encrypt(xor(prev_cipher_block, blocks[i]))
-            cipher += prev_cipher_block
+            plaintext += xor(aes.decrypt(blocks[i]), blocks[i-1])
 
-    return cipher
+    return plaintext
 
 
 if __name__ == '__main__':
@@ -47,14 +46,12 @@ if __name__ == '__main__':
         arr = file.read()
         original_len = len(arr)
 
-    # encrypt
-    key = KEY
-    aes = AES.new(key, AES.MODE_ECB)
-    cipher = aes_encrypt(arr, mode)
-    
-    with open(f'Key_{mode}', 'wb') as file:
-        file.write(key)
+    with open(f'Key_{mode}', 'rb') as file:
+        key = file.read()
 
+    # decrypt
+    aes = AES.new(key, AES.MODE_ECB)
+    plaintext = aes_decrypt(arr, mode)
     # write encrypted image
-    img = Image.open(io.BytesIO(header + cipher[:original_len]))
-    img.save(f'{name}_{mode}.png')
+    img = Image.open(io.BytesIO(header + plaintext[:original_len]))
+    img.save(f'decrypt_{name}.png')
