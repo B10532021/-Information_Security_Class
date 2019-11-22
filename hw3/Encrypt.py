@@ -57,7 +57,8 @@ if __name__ == '__main__':
         header = file.readline() + file.readline() + file.readline()
         arr = file.read()
         original_len = len(arr)
-
+    os.remove(f"{name}.ppm")
+    
     # encrypt
     key = KEY
     aes = AES.new(key, AES.MODE_ECB)

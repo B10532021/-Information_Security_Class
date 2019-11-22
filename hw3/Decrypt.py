@@ -56,6 +56,7 @@ if __name__ == '__main__':
         header = file.readline() + file.readline() + file.readline()
         arr = file.read()
         original_len = len(arr)
+    os.remove(f"{name}.ppm")
 
     with open(f'Key_{mode}', 'rb') as file:
         key = file.read()
@@ -63,6 +64,6 @@ if __name__ == '__main__':
     # decrypt
     aes = AES.new(key, AES.MODE_ECB)
     plaintext = aes_decrypt(arr, mode)
-    # write encrypted image
+    # write decrypted image
     img = Image.open(io.BytesIO(header + plaintext[:original_len]))
-    img.save(f'decrypt_{name}.png')
+    img.save(f'{name}_Decrypt.png')
