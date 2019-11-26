@@ -34,7 +34,8 @@ def aes_encrypt(plaintext: bytes, mode) -> bytes:
         init_vec = INIT_VEC
         cipher = xor(blocks[0], aes.encrypt(init_vec))
         for i in range(1, len(blocks)):
-            cipher += xor(blocks[i], aes.encrypt((int(init_vec.hex(), 16) + i).to_bytes(32, byteorder="big")))
+            counter = (int(init_vec.hex(), 16) + i) % ((1 << 256) - 1)
+            cipher += xor(blocks[i], aes.encrypt(counter.to_bytes(32, byteorder="big")))
 
     return cipher
 
