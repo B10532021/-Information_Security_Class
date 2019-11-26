@@ -10,8 +10,8 @@ from utils import *
 
 
 parser = ArgumentParser()
-parser.add_argument('img_path')
-parser.add_argument('mode', choices=['ECB', 'CBC', 'CTR'])
+parser.add_argument('img_path', help='The path to the image that you want to decrypt')
+parser.add_argument('mode', choices=['ECB', 'CBC', 'CTR'], help='Choose the decryption mode')
 #parser.add_argument('--key', '-k', help='key for AES encryption')
 
 
@@ -23,17 +23,12 @@ def aes_decrypt(ciphertext: bytes, mode) -> bytes:
         plaintext = bytes().join([aes.decrypt(block) for block in blocks])
 
     elif mode == 'CBC':
-        with open(f'INIT_VEC_{mode}', 'rb') as file:
-            init_vec = file.read()
         plaintext = xor(aes.decrypt(blocks[0]), init_vec)
         prev_cipher_block = blocks[0]
         for i in range(1, len(blocks)):
             plaintext += xor(aes.decrypt(blocks[i]), blocks[i-1])
 
     elif mode == 'CTR':
-        with open(f'INIT_VEC_{mode}', 'rb') as file:
-            init_vec = file.read()
-        
         plaintext = xor(blocks[0], aes.encrypt(init_vec))
         for i in range(1, len(blocks)):
             plaintext += xor(blocks[i], aes.encrypt((int(init_vec.hex(), 16) + i).to_bytes(32, byteorder="big")))
@@ -58,12 +53,18 @@ if __name__ == '__main__':
         original_len = len(arr)
     os.remove(f"{name}.ppm")
 
+    # read key
+    os.chdir(os.path.dirname(img_path))
     with open(f'Key_{mode}', 'rb') as file:
         key = file.read()
+    if mode == 'CBC' or mode == 'CTR':
+        with open(f'INIT_VEC_{mode}', 'rb') as file:
+            init_vec = file.read()
 
     # decrypt
     aes = AES.new(key, AES.MODE_ECB)
     plaintext = aes_decrypt(arr, mode)
+
     # write decrypted image
     img = Image.open(io.BytesIO(header + plaintext[:original_len]))
-    img.save(f'{name}_Decrypt.png')
+    img.save(f'Decrypted.png')
