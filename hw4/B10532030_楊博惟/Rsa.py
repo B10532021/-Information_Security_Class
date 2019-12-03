@@ -1,6 +1,6 @@
 from math import gcd
 import random
-from Crypto.PublicKey import _RSA
+
 
 def extend_gcd(a, b):
     """
