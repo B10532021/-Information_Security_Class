@@ -42,7 +42,6 @@ def SquareAndMultiply(base, exponent, modulus):
         y = (y ** 2) % modulus
         if i == '1':
             y = y * base % modulus
-
     return y
 
 def ExtendedEuclidean(a, b):
@@ -117,7 +116,7 @@ def main():
         n = int(input('please enter n：'), 16)
         e = int(input('please enter e：'), 16)
         ciphertext = Encrypt(plaintext, n, e)
-        print(ciphertext)
+        print('ciphertext：{0}'.format(ciphertext))
         return
     elif mode == 'decrypt':
         ciphertext = int(input('please enter ciphertext：'), 16)
@@ -126,7 +125,7 @@ def main():
         p = int(input('please enter p：'), 16)
         q = int(input('please enter q：'), 16)
         plaintext = Decrypt(ciphertext, d, p, q)
-        print(plaintext)
+        print('plaintext：{0}'.format(plaintext))
         return
 
 if __name__ == "__main__":
