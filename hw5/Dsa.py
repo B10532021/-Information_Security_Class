@@ -1,5 +1,8 @@
+from argparse import ArgumentParser
 import random
 import hashlib
+
+import pickle
 
 from utils import *
 
@@ -154,43 +157,77 @@ def generate_signature(message, public_key, private_key):
     p, q, a, b = public_key
     d = private_key
     k = random.randint(1, q - 1)
-    r = square_and_multiply(a, k, p) % q % q
+    r = square_and_multiply(a, k, p) % q
     s = (modulo_inverse(k, q) *
          (int(hashlib.sha1(message).hexdigest(), 16) + d * r)) % q
     return r, s
 
 
+def verify_signature(public_key, message, signature):
+    if type(message) == str:
+        message = message.encode()
+    p, q, a, b = public_key
+    r, s = signature
+    w = modulo_inverse(s, q)
+    u1 = (w * int(hashlib.sha1(message).hexdigest(), 16)) % q
+    u2 = (w*r) % q
+    v = (square_and_multiply(a, u1, p) * square_and_multiply(b, u2, p)) % p % q
+
+    return v == r
+
+
 if __name__ == '__main__':
-    while (True):
+    parser = ArgumentParser()
+    subparsers = parser.add_subparsers(dest='cmd')
+
+    parser_gen = subparsers.add_parser(
+        'generate', help='generate public and private key')
+    parser_gen.add_argument('-n', dest='name', help='file name', default='key')
+    parser_sign = subparsers.add_parser('sign', help='sing the message')
+    parser_sign.add_argument(
+        'pub_name', help='public key file name', default='key.pub')
+    parser_sign.add_argument(
+        'pri_name', help='private key file name', default='key.pri')
+    parser_sign.add_argument('message', help='message to sign')
+
+    parser_verify = subparsers.add_parser(
+        'verify', help='verify the signature')
+    parser_verify.add_argument(
+        'pub_name', help='public key file name', default='key.pub')
+    parser_verify.add_argument('message', help='message to verify')
+    parser_verify.add_argument('r', help='hex string expected')
+    parser_verify.add_argument('s', help='hex string expected')
+
+    args = parser.parse_args()
+
+    cmd = args.cmd
+    if cmd == 'generate':
+        name = args.name
+        (p, q, a, b), d = generate_key()
+        pickle.dump((p, q, a, b), open(f"{name}.pub", 'wb'))
+        pickle.dump(d, open(f"{name}.pri", 'wb'))
+
+        print(f"p: {hex(p)}\n"
+              f"q: {hex(q)}\n"
+              f"a: {hex(a)}\n"
+              f"b: {hex(b)}\n"
+              f"d: {hex(d)}")
         print(
-            "1: generate dsa key\n"
-            "2: generate signature with message=\"myDSAbooo\"\n"
-            "2: generate signature with input message\n"
-        )
-        option = int(input("select your choice:"))
-        if option == 1:
-            (p, q, a, b), private_key = generate_key()
-            print("public key: \n\tp: {}\n\tq: {}\n\ta: {}\n\tb: {}\nprivate key: {}".format(
-                p, q, a, b, private_key))
-        elif option == 2:
-            p = int(input("enter p of public key: "))
-            q = int(input("enter q of public key: "))
-            a = int(input("enter a of public key: "))
-            b = int(input("enter b of public key: "))
-            public_key = (p, q, a, b)
-            private_key = int(input("enter private_key: "))
-            message = "qwertyuiop"
-            signature = generate_signature(message, public_key, private_key)
-            print("signature: \n\tr: {}\n\ts: {})".format(
-                signature[0], signature[1]))
-        elif option == 3:
-            p = int(input("enter p of public key: "))
-            q = int(input("enter q of public key: "))
-            a = int(input("enter a of public key: "))
-            b = int(input("enter b of public key: "))
-            public_key = (p, q, a, b)
-            private_key = int(input("enter private_key: "))
-            message = input("enter message: ")
-            signature = generate_signature(message, public_key, private_key)
-            print("signature: \n\tr: {}\n\ts: {})".format(
-                signature[0], signature[1]))
+            f"public and private key are stored in {name}.pub and {name}.pri respectively")
+    elif cmd == 'sign':
+        public_key = pickle.load(open(args.pub_name, 'rb'))
+        private_key = pickle.load(open(args.pri_name, 'rb'))
+
+        r, s = generate_signature(args.message, public_key, private_key)
+        print(f"signature:\n"
+              f"r: {hex(r)}\n"
+              f"s: {hex(s)}\n")
+    elif cmd == 'verify':
+        public_key = pickle.load(open(args.pub_name, 'rb'))
+        message = args.message
+        signature = (int(args.r, 16), int(args.s, 16))
+
+        if verify_signature(public_key, message, signature):
+            print('signature is valid')
+        else:
+            print('signature is invalid')
