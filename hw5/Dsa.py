@@ -164,6 +164,13 @@ def generate_signature(message, public_key, private_key):
 
 
 def verify_signature(public_key, message, signature):
+    """
+    check is the signature is valid
+    message only allow byte-string, if is str the function would convert it into byte-string
+    :param message: string
+    :param public_key: (int, int, int, int)
+    :return: bool    
+    """
     if type(message) == str:
         message = message.encode()
     p, q, a, b = public_key
@@ -231,3 +238,36 @@ if __name__ == '__main__':
             print('signature is valid')
         else:
             print('signature is invalid')
+
+
+
+# p = int(input("enter p of public key: "))
+#             q = int(input("enter q of public key: "))
+#             a = int(input("enter a of public key: "))
+#             b = int(input("enter b of public key: "))
+#             public_key = (p, q, a, b)
+#             private_key = int(input("enter private_key: "))
+#             r = int(input("enter r of the ciphertext: "))
+#             s = int(input("enter s of the ciphertext: "))
+#             ciphertext = (r, s)
+#             message = input("enter message: ")
+#             valid = verification(message, public_key, private_key, ciphertext)
+#             if valid:
+#                 print("It is valid")
+#             else:
+#                 print("It is not valid")
+
+# def verification(message, public_key, private_key, ciphertext):
+#     if type(message) == str:
+#         message = message.encode()
+#     p, q, a, b = public_key
+#     d = private_key
+#     w = modulo_inverse(s, q)
+#     beta = square_and_multiply(a, d, p)
+#     u1 = w * int(hashlib.sha1(message).hexdigest(), 16) % q
+#     u2 = w * r % q
+#     v = square_and_multiply(a, u1, p) * square_and_multiply(beta, u2, p) % p % q
+#     if v == r:
+#         return True
+#     else:
+#         return False
